@@ -58,6 +58,30 @@ def generate_combinations(doc, questions, num_combinations):
         doc.append(NewPage())
     return table
 
+def mark(guesses, answers):
+    from colorama import Fore
+    out = []
+    for g, a in zip(guesses, answers):
+        if g==a:
+            out.append(Fore.GREEN + str(g))
+        else:
+            out.append(Fore.RED + str(g))
+    out[-1] += Fore.RESET
+    return " ".join(out)  
+
+def marker(table):
+    while True:
+        print("ID ", end="")
+        id = int(input())
+        print("Answers: ", end="")
+        answers = input().split(" ")
+        print ("\033[A                             \033[A")
+        correct_answers = [str(a[0]) for a in  table[id][1:]]
+        print("          index " + " ".join(map(str, range(1, len(correct_answers) +1))))
+        print("Correct answers " + " ".join(correct_answers))
+        print("Student answers " + mark(answers, correct_answers))
+        print("")
+
 
 if __name__ == '__main__':
     # Basic document
@@ -74,7 +98,7 @@ if __name__ == '__main__':
                 data_table.add_row(row)
                 data_table.add_hline()
     doc.generate_pdf()
-
+    marker(table)
     # Generate all the combinations
     doc = Document('check_answers')
     question_1.append_all_with_answers(doc)

@@ -1,3 +1,4 @@
-- Terminal interface
+- Add scoring to terminal interface
+- Make generator class
 - Pass question index from the generator in order to enable permutation of questions.
 - GUI

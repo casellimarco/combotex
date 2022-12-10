@@ -7,6 +7,6 @@ if __name__ == '__main__':
         description='',
         author='Caselli Marco',
         author_email='casellimarco&@gmail.combotex',
-        install_requires=["pylatex"],
+        install_requires=["pylatex", "colorama"],
         license="MIT"
     )
