@@ -24,7 +24,7 @@ question_1 = Question(
         [7, 8, 9]
     ]
 )
-    
+
 def question_text_2(doc: pylatex.Document, parameters: Dict[str, str], choices: List[str]):
     with doc.create(Section('Question 2', numbering=False)):
         doc.append(f'{parameters["a"]} x {parameters["b"]} = ' )
@@ -57,7 +57,7 @@ def generate_combinations(doc, questions, num_combinations):
         table.append(row)
         doc.append(NewPage())
     return table
-            
+
 
 if __name__ == '__main__':
     # Basic document
@@ -73,4 +73,11 @@ if __name__ == '__main__':
             for row in table:
                 data_table.add_row(row)
                 data_table.add_hline()
-    doc.generate_pdf(clean_tex=False)
+    doc.generate_pdf()
+
+    # Generate all the combinations
+    doc = Document('check_answers')
+    question_1.append_all_with_answers(doc)
+    doc.append(NewPage())
+    question_2.append_all_with_answers(doc)
+    doc.generate_pdf()

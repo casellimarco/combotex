@@ -10,7 +10,7 @@ class Question:
     answers: List
     choices: List[List]
     answers_index: Dict[int,int] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         assert len(self.answers) == len(self.choices), "Number of answers must be equal to number of choices"
         for i, answer in enumerate(self.answers):
@@ -28,3 +28,8 @@ class Question:
         self.question_text(doc, parameters, possible_answers)
         # TODO: Assuming enumerate indexing, generalise to any indexing.
         return self.answers_index[index]+1, self.answers[index]
+
+    def append_all_with_answers(self, doc):
+        for i in range(len(self.answers)):
+            answer_index, answer = self.append(doc, i)
+            doc.append(f"Correct answer: {answer_index}) {answer}.")
