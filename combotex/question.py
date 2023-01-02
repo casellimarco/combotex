@@ -1,4 +1,5 @@
 from typing import Dict, Callable, Any, List
+from pylatex import Enumerate
 import random
 
 from dataclasses import dataclass, field
@@ -25,7 +26,11 @@ class Question:
     def append(self, doc, index):
         possible_answers = self.choices[index]
         parameters = {k:v[index] for k, v in self.parameters.items()}
-        self.question_text(doc, parameters, possible_answers)
+        self.question_text(doc, parameters)
+        with doc.create(Enumerate()) as enum:
+            for choice in possible_answers:
+                enum.add_item(choice)
+
         # TODO: Assuming enumerate indexing, generalise to any indexing.
         return self.answers_index[index]+1, self.answers[index]
 
