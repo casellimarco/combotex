@@ -1,12 +1,31 @@
 from typing import Dict, Callable, Any, List
 
 import pylatex
-from pylatex import Document, Section, Enumerate, NewPage, LongTable
+from pylatexenc import latexencode
+from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package
 from combotex import Question
 
 def question_text_1(doc: pylatex.Document, parameters: Dict[str, Any], choices: List[Any]):
     with doc.create(Section('Question 1', numbering=False)):
         doc.append(f'{parameters["a"]} + {parameters["b"]} = ' )
+        doc.append(NoEscape(rf"\newline Questo \'e un esempio con un input copioincollato da latex ed un parametro dentro la formula \[3^5 +{parameters['a']}\]"))
+        doc.append(NoEscape(r"""\`E dato il sistema lineare \[\begin{cases}x + 2y + 3z = 4\\x + z = 0\\kx + z = k^2-1\end{cases}\] dove $k \in \mathbb{R}$. Determina tutti e soli i valori di $k$ per cui il sistema ammette soluzioni.
+    \begin{enumerate}
+    \item $k \neq -1,\  1$
+    \item $k \neq 1$
+    \item $k = 0$
+    \item $k \in \mathbb{R}$
+    \item Il sistema non ha soluzione per alcun valore di $k \in \mathbb{R}$
+    \end{enumerate}
+
+Sapendo che $\vec{\beta}_1 = \begin{bmatrix}1\\1\\1\end{bmatrix}$ e $\vec{\beta}_2 = \begin{bmatrix}1\\0\\0\end{bmatrix}$ e che le coordinate di $\vec{v}$ rispetto alla base $\mathcal{B}$ sono date da $[\vec{v}]_{\mathcal{B}} = \begin{bmatrix}1\\2\\3\end{bmatrix}$, quale tra questi \`e $\vec{\beta}_3$?
+    \begin{enumerate}
+    \item $[-2/3,\ -1/3, \ 0]^T$
+    \item $[-1/3,\ -2/3, \ 0]^T$
+    \item $[1/3,\ 0,\ 2/3]^T$
+    \item $[-1/3,\ 2/3,\ 0]^T$
+    \item $[-2/3,\ 0 ,\ -1/3]^T$
+    \end{enumerate}"""))
         with doc.create(Enumerate()) as enum:
             for choice in choices:
                 enum.add_item(choice)
@@ -86,6 +105,8 @@ def marker(table):
 if __name__ == '__main__':
     # Basic document
     doc = Document('basic', page_numbers=False)
+    doc.packages.append(Package("amsmath"))
+    doc.packages.append(Package("amsfonts"))
     questions = [question_1, question_2]
     table = generate_combinations(doc, questions, num_combinations=4)
     # Generate data table
@@ -101,6 +122,8 @@ if __name__ == '__main__':
     
     # Generate all the combinations
     doc = Document('check_answers')
+    doc.packages.append(Package("amsmath"))
+    doc.packages.append(Package("amsfonts"))
     question_1.append_all_with_answers(doc)
     doc.append(NewPage())
     question_2.append_all_with_answers(doc)
