@@ -1,8 +1,7 @@
-from typing import Dict, Callable, Any, List
+from typing import Dict, Any
 
 import pylatex
-from pylatexenc import latexencode
-from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package
+from pylatex import Section, NoEscape
 from combotex import Question, Exam
 
 def question_text_1(doc: pylatex.Document, parameters: Dict[str, Any]):
@@ -58,18 +57,6 @@ question_2 = Question(
         [7, 8, 10]
     ]
 )
-
-
-def generate_combinations(doc, questions, num_combinations):
-    table = []
-    for i in range(num_combinations):
-        row = [i]
-        doc.append(f"Id: {i}")
-        for question in questions:
-            row.append(question.append_random(doc))
-        table.append(row)
-        doc.append(NewPage())
-    return table
 
 
 if __name__ == '__main__':
