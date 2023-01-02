@@ -98,10 +98,12 @@ if __name__ == '__main__':
                 data_table.add_row(row)
                 data_table.add_hline()
     doc.generate_pdf()
-    marker(table)
+    
     # Generate all the combinations
     doc = Document('check_answers')
     question_1.append_all_with_answers(doc)
     doc.append(NewPage())
     question_2.append_all_with_answers(doc)
     doc.generate_pdf()
+
+    marker(table)
