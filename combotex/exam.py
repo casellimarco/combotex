@@ -29,7 +29,7 @@ class Exam:
         doc.generate_pdf()
 
     def check_answers(self):
-        doc = self.generate_file(self.exam_name+"check_answers")
+        doc = self.generate_file(self.exam_name+"_check_answers")
         for question in self.questions:
             question.append_all_with_answers(doc)
             doc.append(NewPage())
