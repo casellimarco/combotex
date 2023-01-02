@@ -3,7 +3,7 @@ from typing import Dict, Callable, Any, List
 import pylatex
 from pylatexenc import latexencode
 from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package
-from combotex import Question
+from combotex import Question, Exam
 
 def question_text_1(doc: pylatex.Document, parameters: Dict[str, Any]):
     with doc.create(Section('Question 1', numbering=False)):
@@ -71,47 +71,16 @@ def generate_combinations(doc, questions, num_combinations):
         doc.append(NewPage())
     return table
 
-def mark(guesses, answers):
-    from colorama import Fore
-    out = []
-    for g, a in zip(guesses, answers):
-        if g==a:
-            out.append(Fore.GREEN + str(g))
-        else:
-            out.append(Fore.RED + str(g))
-    out[-1] += Fore.RESET
-    return " ".join(out)  
-
-def marker(table):
-    while True:
-        print("ID ", end="")
-        id = int(input())
-        print("Answers: ", end="")
-        answers = input().split(" ")
-        print ("\033[A                             \033[A")
-        correct_answers = [str(a[0]) for a in  table[id][1:]]
-        print("          index " + " ".join(map(str, range(1, len(correct_answers) +1))))
-        print("Correct answers " + " ".join(correct_answers))
-        print("Student answers " + mark(answers, correct_answers))
-        print("")
-
 
 if __name__ == '__main__':
-    # Basic document
-    doc = Document('basic', page_numbers=False)
-    doc.packages.append(Package("amsmath"))
-    doc.packages.append(Package("amsfonts"))
+    # Basic exam
     questions = [question_1, question_2]
-    table = generate_combinations(doc, questions, num_combinations=4)
-    doc.generate_pdf()
+    exam = Exam("basic", questions)
+    exam.generate_exams(num_exams=4)
     
     # Generate all the combinations
-    doc = Document('check_answers')
-    doc.packages.append(Package("amsmath"))
-    doc.packages.append(Package("amsfonts"))
-    question_1.append_all_with_answers(doc)
-    doc.append(NewPage())
-    question_2.append_all_with_answers(doc)
-    doc.generate_pdf()
+    exam.check_answers()
 
-    marker(table)
+    # Interactive marker
+    exam.marker()
+
