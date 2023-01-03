@@ -30,15 +30,17 @@ class Question:
 
     def append(self, doc, index):
         possible_answers = self.choices[index]
+        shuffled_indices = list(range(len(possible_answers)))
+        random.shuffle(shuffled_indices)
         parameters = {k:v[index] for k, v in self.parameters.items()}
         with doc.create(Section(self.question_name, numbering=False)):
             doc.append(NoEscape(self.question_text(parameters)))
         with doc.create(Enumerate(r"\alph*)")) as enum:
-            for choice in possible_answers:
-                enum.add_item(NoEscape(choice))
+            for i in shuffled_indices:
+                enum.add_item(NoEscape(possible_answers[i]))
 
         # TODO: Assuming alphabetic indexing, generalise to any indexing.
-        return chr(self.answers_index[index]+97), self.answers[index]
+        return chr(shuffled_indices.index(self.answers_index[index])+97), self.answers[index]
 
     def append_all_with_answers(self, doc):
         for i in range(len(self.answers)):

@@ -1,5 +1,5 @@
-- Permute answers
 - Add constant text before and after
+- Track answers (wrt to parameters)
 - Make generator class
 - Pass question index from the generator in order to enable permutation of questions.
 - GUI
