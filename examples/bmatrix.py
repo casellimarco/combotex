@@ -42,4 +42,4 @@ if __name__ == '__main__':
     exam.check_answers()
 
     # Interactive marker
-    exam.marker()
+    exam.marker(correct_score=1, wrong_score=-1, missing_score=0)

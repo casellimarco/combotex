@@ -2,18 +2,28 @@ from typing import List
 from dataclasses import dataclass, field
 
 from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package
+from collections import namedtuple
 
+Scoring = namedtuple('Scoring', 'correct wrong missing')
 
-def mark(guesses, answers):
+def mark(guesses, answers, scoring):
     from colorama import Fore
     out = []
+    score = 0
+    if len(guesses) != len(answers):
+        print(Fore.RED + f" --- WARNING: misalignement between guesses and answers: there are {len(guesses)} guesses and {len(answers)} answers." + Fore.RESET)
     for g, a in zip(guesses, answers):
         if g==a:
             out.append(Fore.GREEN + str(g))
+            score += scoring.correct
+        elif g in ["m", "M"]:
+            out.append(Fore.YELLOW + str(g))
+            score += scoring.missing
         else:
             out.append(Fore.RED + str(g))
+            score += scoring.wrong
     out[-1] += Fore.RESET
-    return " ".join(out)  
+    return " ".join(out), score  
 
 
 
@@ -53,15 +63,20 @@ class Exam:
         self.table = table
     
 
-    def marker(self):
+    def marker(self, correct_score, wrong_score, missing_score):
+        scoring = Scoring(correct=correct_score, wrong=wrong_score, missing=missing_score)
+        print("Input the answers in order and space-separated. Use `m` or `M` for missing ones.")
         while True:
             print("ID ", end="")
             id = int(input())
             print("Answers: ", end="")
-            answers = input().split(" ")
+            answers = input().strip().split(" ")
             print ("\033[A                             \033[A")
             correct_answers = [str(a[0]) for a in  self.table[id][1:]]
             print("          index " + " ".join(map(str, range(1, len(correct_answers) +1))))
             print("Correct answers " + " ".join(correct_answers))
-            print("Student answers " + mark(answers, correct_answers))
+            student_answers, score = mark(answers, correct_answers, scoring)
+            print("Student answers " + student_answers)
+            print("  -----")
+            print("Student score   " + str(score))
             print("")
