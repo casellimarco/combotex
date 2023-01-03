@@ -1,5 +1,4 @@
 - Permute answers
-- Index by letters
 - Add constant text before and after
 - Make generator class
 - Pass question index from the generator in order to enable permutation of questions.

@@ -33,12 +33,12 @@ class Question:
         parameters = {k:v[index] for k, v in self.parameters.items()}
         with doc.create(Section(self.question_name, numbering=False)):
             doc.append(NoEscape(self.question_text(parameters)))
-        with doc.create(Enumerate()) as enum:
+        with doc.create(Enumerate(r"\alph*)")) as enum:
             for choice in possible_answers:
                 enum.add_item(NoEscape(choice))
 
-        # TODO: Assuming enumerate indexing, generalise to any indexing.
-        return self.answers_index[index]+1, self.answers[index]
+        # TODO: Assuming alphabetic indexing, generalise to any indexing.
+        return chr(self.answers_index[index]+97), self.answers[index]
 
     def append_all_with_answers(self, doc):
         for i in range(len(self.answers)):
