@@ -37,11 +37,15 @@ question_2 = Question(
     question_name= "Question 2"
 )
 
+pre_questions = r"Some text before the questions in all exams"
+post_questions = r"Some text after the questions in all exams"
+
+
 
 if __name__ == '__main__':
     # Basic exam
     questions = [question_1, question_2]
-    exam = Exam("basic", questions)
+    exam = Exam("basic", questions, pre_questions, post_questions)
     exam.generate_exams(num_exams=4)
     
     # Generate all the combinations

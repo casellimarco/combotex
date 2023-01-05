@@ -1,7 +1,7 @@
 from typing import List
 from dataclasses import dataclass, field
 
-from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package
+from pylatex import Document, Section, Enumerate, NewPage, LongTable, NoEscape, Package, NewLine
 from collections import namedtuple
 
 Scoring = namedtuple('Scoring', 'correct wrong missing')
@@ -31,6 +31,8 @@ def mark(guesses, answers, scoring):
 class Exam:
     exam_name: str
     questions: List
+    pre_questions: str = ""
+    post_questions: str = ""
     table: List = None
 
     def generate_exams(self, num_exams):
@@ -55,10 +57,13 @@ class Exam:
         table = []
         for i in range(num_combinations):
             row = [i]
-            doc.append(f"Id: {i}")
+            doc.append(rf"Id: {i}")
+            doc.append(NewLine())
+            doc.append(self.pre_questions)
             for question in self.questions:
                 row.append(question.append_random(doc))
             table.append(row)
+            doc.append(self.post_questions)
             doc.append(NewPage())
         self.table = table
     
