@@ -35,17 +35,17 @@ class Exam:
     post_questions: str = ""
     table: List = None
 
-    def generate_exams(self, num_exams):
+    def generate_exams(self, num_exams, **kwargs):
         doc = self.generate_file(self.exam_name)
         self.generate_combinations(doc, num_combinations=num_exams)
-        doc.generate_pdf()
+        doc.generate_pdf(**kwargs)
 
-    def check_answers(self):
+    def check_answers(self, **kwargs):
         doc = self.generate_file(self.exam_name+"_check_answers")
         for question in self.questions:
             question.append_all_with_answers(doc)
             doc.append(NewPage())
-        doc.generate_pdf()
+        doc.generate_pdf(**kwargs)
     
     def generate_file(self, filename):
         doc = Document(filename, page_numbers=False)

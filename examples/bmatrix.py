@@ -36,10 +36,10 @@ if __name__ == '__main__':
     # Basic exam
     questions = [question_1]
     exam = Exam("basic", questions)
-    exam.generate_exams(num_exams=4)
+    exam.generate_exams(num_exams=4, clean_tex=False)
     
     # Generate all the combinations
-    exam.check_answers()
+    exam.check_answers(clean_tex=False)
 
     # Interactive marker
     exam.marker(correct_score=1, wrong_score=-1, missing_score=0)
